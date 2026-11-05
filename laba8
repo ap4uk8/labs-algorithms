@@ -1,0 +1,15 @@
+print("Введите неотрицательные целые числа через пробел:")
+a = list(map(int, input().split()))
+
+if a:
+    max_num = max(a)
+    exp = 1
+    while max_num // exp > 0:
+        buckets = [[] for _ in range(10)]
+        for x in a:
+            digit = (x // exp) % 10
+            buckets[digit].append(x)
+        a = [x for bucket in buckets for x in bucket]
+        exp *= 10
+
+print("Отсортировано:", a)

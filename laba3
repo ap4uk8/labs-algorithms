@@ -1,0 +1,11 @@
+x = int(input("Введите x: "))
+
+res = []
+for k in range(x + 1):
+    for l in range(x + 1):
+        for m in range(x + 1):
+            digit = (3**k) * (5**l) * (7**m)
+            if digit <= x:
+                res.append(digit)
+
+print(sorted(res))

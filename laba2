@@ -1,0 +1,81 @@
+def check_brackets(stroka):
+    pary = {")": "(", "]": "[", "}": "{"}
+    stek = []
+    for simvol in stroka:
+        if simvol in "([{":
+            stek.append(simvol)
+        elif simvol in ")]}":
+            if len(stek) == 0:
+                return False
+            verhniy = stek[-1]
+            if verhniy != pary[simvol]:
+                return False
+            stek.pop()
+    return len(stek) == 0
+
+
+def calc(a, b, op):
+    if op == "+":
+        return a + b
+    if op == "-":
+        return a - b
+    if op == "*":
+        return a * b
+    if b == 0:
+        raise ZeroDivisionError
+    return a / b
+
+
+def evaluate(s):
+    pr = {"+": 1, "-": 1, "*": 2, "/": 2}
+    nums, ops = [], []
+    i = 0
+    while i < len(s):
+        c = s[i]
+        if c == " ":
+            i += 1
+            continue
+        if c.isdigit() or c == ".":
+            j = i
+            while j < len(s) and (s[j].isdigit() or s[j] == "."):
+                j += 1
+            nums.append(float(s[i:j]))
+            i = j
+            continue
+        if c == "(":
+            ops.append(c)
+        elif c == ")":
+            while ops[-1] != "(":
+                b = nums.pop()
+                a = nums.pop()
+                nums.append(calc(a, b, ops.pop()))
+            ops.pop()
+        else:
+            while ops and ops[-1] != "(" and pr[ops[-1]] >= pr[c]:
+                b = nums.pop()
+                a = nums.pop()
+                nums.append(calc(a, b, ops.pop()))
+            ops.append(c)
+        i += 1
+    while ops:
+        b = nums.pop()
+        a = nums.pop()
+        nums.append(calc(a, b, ops.pop()))
+    return nums[0]
+
+
+print("Введите выражение (закончите '='):")
+raw = input().strip()
+
+if not raw.endswith("="):
+    print("Ошибка: нет '=' в конце")
+elif not check_brackets(raw[:-1]):
+    print("Ошибка: скобки неверны")
+else:
+    try:
+        r = evaluate(raw[:-1])
+        print("Результат:", int(r) if r == int(r) else r)
+    except ZeroDivisionError:
+        print("Ошибка: деление на ноль")
+    except Exception:
+        print("Ошибка: некорректное выражение")

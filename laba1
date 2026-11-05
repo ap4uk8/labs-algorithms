@@ -1,0 +1,23 @@
+def check_brackets(stroka):
+    pary = {")": "(", "]": "[", "}": "{"}
+    stek = []
+    for simvol in stroka:
+        if simvol in "([{":
+            stek.append(simvol)
+        elif simvol in ")]}":
+            if len(stek) == 0:
+                return False
+            verhniy = stek[-1]
+            if verhniy != pary[simvol]:
+                return False
+            stek.pop()
+    return len(stek) == 0
+
+
+print("Введите строку:")
+stroka = input()
+
+if check_brackets(stroka):
+    print("Строка существует")
+else:
+    print("Строка не существует")

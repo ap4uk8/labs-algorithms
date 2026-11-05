@@ -1,0 +1,17 @@
+print("Введите числа через пробел:")
+a = list(map(int, input().split()))
+
+n = len(a)
+gap = n // 2
+
+while gap > 0:
+    for i in range(gap, n):
+        key = a[i]
+        j = i
+        while j >= gap and a[j - gap] > key:
+            a[j] = a[j - gap]
+            j -= gap
+        a[j] = key
+    gap //= 2
+
+print("Отсортировано:", a)
